@@ -8,7 +8,7 @@ nth = 30000000
 
 last = line[-1]
 for i in range(len(line)+1, nth+1):
-    if len(spoken[last]) < 2: # .count?
+    if len(spoken[last]) < 2:
         spoken[0].append(i)
         last = 0
     else:
