@@ -55,3 +55,4 @@ for seat in "".join(lines):
     ans += seat == '#'
 
 print(ans)
+
