@@ -21,16 +21,14 @@ for line in rule_lines.split('\n'):
     if subrule2:
         rules[key].append(tuple(map(int,subrule2.split())))
 
-def expand(subrules):
-    ret = "(" + "".join(expand(rules[rule]) if isinstance(rules[rule],list) else rules[rule] for rule in subrules[0])
+rules[8] = [tuple([42] * n) for n in range(1,10)]
+rules[11] = [tuple([42] * n + [31] * n) for n in range(1,5)]
 
-    if len(subrules) == 2:
-        ret += "|" + "".join(expand(rules[rule]) if isinstance(rules[rule],list) else rules[rule] for rule in subrules[1])
+def expand(rn):
+    subrules = rules[rn]
+    return '(' + '|'.join("".join(expand(rule) if isinstance(rules[rule],list) else rules[rule] for rule in s) for s in subrules) + ')'
 
-    ret += ')'
-    return ret
-
-regex = '^' + expand(rules[0]) + '$'
+regex = '^' + expand(0) + '$'
 
 ans = 0
 for line in message_lines.split('\n'):
