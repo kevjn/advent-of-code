@@ -3,21 +3,24 @@ import itertools as it
 
 cups = [int(cup) for cup in open('input').read().rstrip()]
 
-for _ in range(100):
-    cur = cups[0]
-    picks = cups[1:4]
-    del cups[0:4]
+cups += range(max(cups)+1, int(1e6)+1)
 
-    dest = cur-1
-    while dest not in cups:
-        dest -= 1
-        if dest < min(cups):
-            dest = max(cups)
+cur = cups[0]
+cups = {cup : nxt for cup, nxt in zip(cups, cups[1:] + [cups[0]])}
+for _ in range(int(1e7)):
+    start = cups[cur]
+    mid = cups[cups[cur]]
+    end = cups[cups[cups[cur]]]
 
-    dest_idx = cups.index(dest)
-    cups = cups[:dest_idx+1] + picks + cups[dest_idx+1:] + [cur]
+    remove = {start, mid, end}
+    dest = cur - 1 if cur > 1 else int(1e6)
+    while dest in remove:
+        dest = dest-1 if dest != 1 else int(1e6)
+    
+    cups[cur] = cups[end]
+    cups[end] = cups[dest]
+    cups[dest] = start
+    cur = cups[cur]
 
-n = cups.index(1)
-cups = cups[n:] + cups[:n]
-
-print("".join(str(cup) for cup in cups[1:]))
+a,b = cups[1], cups[cups[1]]
+print(a * b)
